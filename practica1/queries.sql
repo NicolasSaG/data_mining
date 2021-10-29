@@ -49,7 +49,7 @@ select distinct dbo.incidentes_mod.clas_con_f_alarma from dbo.incidentes_mod;
 
 --delegacion_inicio
 select distinct dbo.incidentes_mod.delegacion_inicio from dbo.incidentes_mod;
-select * from dbo.incidentes_mod where dbo.incidentes_mod.delegacion_cierre is NULL;
+select * from dbo.incidentes_mod where dbo.incidentes_mod.delegacion_inicio is NULL;
 
 --delegacion_cierre
 select distinct dbo.incidentes_mod.delegacion_cierre from dbo.incidentes_mod;
