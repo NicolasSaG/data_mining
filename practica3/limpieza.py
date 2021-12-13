@@ -1,4 +1,5 @@
 import pandas as pd
+import unidecode
 
 
 def generarCodigo(clave_entidad, clave_municipio, clave_localidad, clave_ageb, clave_manzana):
@@ -31,13 +32,11 @@ df_inegi = pd.DataFrame(inegi_file)
 
 df1 = df_inegi[['ENTIDAD', 'NOM_ENT', 'MUN', 'NOM_MUN',
                 'LOC', 'NOM_LOC', 'AGEB', 'MZA', 'POBTOT', 'POBMAS', 'POBFEM', 'VIVTOT']].copy()
-# df2 = df1[df1['NOM_MUN'] != "Total de la entidad Ciudad de México"]
+
 df2 = df1[~ df1.NOM_MUN.str.contains("Total")]
 df3 = df2[~ df2.NOM_LOC.str.contains("Total")]
 df3 = df3.reset_index()
 df3 = df3.drop(columns=["index"])
-print(df3.head(10))
-# print(df3.groupby(['NOM_MUN']).mean())
 
 
 # Creacion de archivos finales
@@ -48,20 +47,17 @@ cabeceras_lugar = ["mapa", "cve_ent", "nom_ent",
 df_poblacion = pd.DataFrame(columns=cabeceras_poblacion)
 df_lugar = pd.DataFrame(columns=cabeceras_lugar)
 
-for index, row in df3.head(10).iterrows():
+for index, row in df3.iterrows():
+    if (index / (df3.shape[0])) % 5:
+        print((index / (df3.shape[0]))*100, "%")
     mapa = generarCodigo(str(row["ENTIDAD"]), str(row["MUN"]),
                          str(row["LOC"]), str(row["AGEB"]), str(row["MZA"]))
 
     df_poblacion.loc[index] = [row["POBTOT"],
                                row["POBMAS"], row["POBFEM"], row["VIVTOT"]]
-    df_lugar.loc[index] = [mapa,
-                           row["ENTIDAD"], row["NOM_ENT"], row["MUN"], row["NOM_MUN"], row["LOC"], row["NOM_LOC"]]
-    # print(index, row['NOM_MUN'])
+    df_lugar.loc[index] = [str(mapa),
+                           row["ENTIDAD"], unidecode.unidecode(row["NOM_ENT"].upper()), row["MUN"],  unidecode.unidecode(row["NOM_MUN"].upper()), row["LOC"], unidecode.unidecode(row["NOM_LOC"].upper())]
 
-print(df_poblacion.head(10))
-print(df_lugar.head(10))
 # exportar datos
-
-df3.head(10).to_csv("check.csv", index_label="id_test")
-# df_poblacion.head(10).to_csv("poblacion.csv", index_label="id_poblacion")
-# df_lugar.head(10).to_csv("lugar.csv", index_label="id_lugar")
+df_poblacion.to_csv("poblacion.csv", index_label="id_poblacion")
+df_lugar.to_csv("lugar.csv", index_label="id_lugar")
