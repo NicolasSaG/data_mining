@@ -3,7 +3,7 @@ from math import floor
 from random import randrange
 from sklearn.model_selection import train_test_split
 
-file = pd.read_csv("tabla_hechos.csv",  encoding="utf-8")
+file = pd.read_csv("tabla_hechos.csv",  encoding="utf-8", index_col=None)
 df = pd.DataFrame(file)
 # print(df.head(30))
 
@@ -28,6 +28,6 @@ real_train, validation = train_test_split(
 
 # print(validation.head(10))
 
-real_train.to_csv("dataset_training.csv")
-test.to_csv("dataset_testing.csv")
-validation.to_csv("dataset_validation.csv")
+real_train.to_csv("dataset_training.csv", index=False)
+test.to_csv("dataset_testing.csv", index=False)
+validation.to_csv("dataset_validation.csv", index=False)
