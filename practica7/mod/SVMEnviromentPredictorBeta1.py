@@ -5,16 +5,15 @@ from sklearn.model_selection import GridSearchCV
 from sklearn.metrics import precision_score,accuracy_score
 import numpy as np
 
-dfTraining = pd.read_csv("DataSetTraining.csv")
-dfTesting = pd.read_csv("DataSetTesting.csv")
+dfTraining = pd.read_csv("dataset_training.csv")
+dfTesting = pd.read_csv("dataset_testing.csv")
 
  
-X_train = dfTraining[["anio","mes","dia"]]
-y_train=dfTraining.AvgMedicion
+X_train = dfTraining[["mes","dia"]]
+y_train=dfTraining.average
 
-X_testing = dfTesting[["anio","mes","dia"]]
-y_testing = dfTesting.AvgMedicion
-
+X_testing = dfTesting[["mes","dia"]]
+y_testing = dfTesting.average
 
 print("-------------------- Normal SVM -------------------------")
 
